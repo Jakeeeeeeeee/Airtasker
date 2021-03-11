@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import HeaderItem from '../../../../components/HeaderItem';
+import Button from '../../../../components/Button';
 
 const Layout = styled.div`
   flex: 1;
@@ -27,6 +28,9 @@ const Toggler = styled.div`
 
 const Navigation = () => (
     <Layout>
+      <HeaderItem>
+        <Button variant='primary'>Post a task</Button>
+      </HeaderItem>
       <HeaderItem highlight>
         <Toggler>
           Categories

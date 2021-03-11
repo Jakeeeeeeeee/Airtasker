@@ -1,31 +1,22 @@
 import styled from 'styled-components';
 import HeaderItem from '../../../../components/HeaderItem';
+import Button from '../../../../components/Button';
 
 const Layout = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const Button = styled.button`
-  outline: 0;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  font-size: inherit;
-  cursor: pointer;
-
-  &:hover {
-    color: gray;
-  }
-`;
-
 const Auth = () => (
   <Layout>
     <HeaderItem>
-      <Button>Sign Up</Button>
+      <Button variant='nacked'>Sign Up</Button>
     </HeaderItem>
     <HeaderItem>
-      <Button>Login in</Button>
+      <Button variant='nacked'>Login in</Button>
+    </HeaderItem>
+    <HeaderItem>
+      <Button variant='secondary'>Become a Tasker</Button>
     </HeaderItem>
   </Layout>
 );
