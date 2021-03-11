@@ -1,9 +1,15 @@
+import Header from "./Header";
+import styled from 'styled-components';
+
+const Layout = styled.div`
+  display: flex;
+`;
 
 function App() {
   return (
-    <div className="App">
-      123
-    </div>
+    <Layout>
+      <Header />
+    </Layout>
   );
 }
 
