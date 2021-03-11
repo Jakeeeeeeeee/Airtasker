@@ -12,18 +12,10 @@ const Layout = styled.div`
 const Link = styled.a`
   color: inherit;
   text-decoration: none;
-
-  &:hover {
-    color: gray;
-  }
 `;
 
 const Toggler = styled.div`
   cursor: pointer;
-
-  &:hover {
-    color: gray;
-  }
 `;
 
 const Navigation = () => (
@@ -31,16 +23,14 @@ const Navigation = () => (
       <HeaderItem>
         <Button variant='primary'>Post a task</Button>
       </HeaderItem>
-      <HeaderItem highlight>
-        <Toggler>
+      <HeaderItem highlight as={Toggler}>
           Categories
-        </Toggler>
       </HeaderItem>
-      <HeaderItem highlight>
-        <Link href="/tasks">Browse tasks</Link>
+      <HeaderItem highlight as={Link} href="/tasks">
+        Browse tasks
       </HeaderItem>
-      <HeaderItem highlight>
-        <Link href="/faq">How it works</Link>
+      <HeaderItem highlight as={Link} href="/faq">
+        How it works
       </HeaderItem>
     </Layout>
 );
