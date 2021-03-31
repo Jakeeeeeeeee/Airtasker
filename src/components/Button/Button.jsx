@@ -6,6 +6,17 @@ const Button = styled.button`
   cursor: pointer;
   border-radius: 200px;
   font-size: 12px;
+  cursor: pointer;
+
+  ${(props) => ({
+    sm: css`
+      font-size: 12px;
+      padding: 8px 14px;
+    `,
+    md: css`
+      padding: 10px 16px;
+    `,
+  })[props.size || 'md']}
 
   ${(props) => ({
     primary: css`
@@ -18,16 +29,33 @@ const Button = styled.button`
       background-color: #f6f8fd;
       border: 1px solid #e1e3e8;
     `,
+    success: css`
+      background-color: rgb(125, 179, 67);
+      border: 1px solid rgb(125, 179, 67);
+      color: white;
+    `,
     nacked: css`
-      outline: 0;
+      color: inherit;
       border: 0;
-      background: transparent;
+      background-color: transparent;
       padding: 0;
       font-size: inherit;
-      cursor: pointer;
+      border-radius: 0;
 
       &:hover {
         color: gray;
+      }
+    `,
+    link: css`
+      color: #008fb4;
+      border: 0;
+      background-color: transparent;
+      padding: 0;
+      font-size: inherit;
+      border-radius: 0;
+
+      &:hover {
+        text-decoration: underline;
       }
     `,
   }[props.variant])}
