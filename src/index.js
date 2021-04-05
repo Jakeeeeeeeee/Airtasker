@@ -5,7 +5,10 @@ import App from './App';
 import 'normalize.css';
 
 ReactDOM.render((
-    <App />),
+  <>
+    <App />
+  </>
+),
   document.getElementById('root')
 );
 
