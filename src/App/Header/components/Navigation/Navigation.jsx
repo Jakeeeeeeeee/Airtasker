@@ -3,6 +3,56 @@ import HeaderItem from '../../../../components/HeaderItem';
 import Button from '../../../../components/Button';
 import React from 'react';
 
+const StyledAnimation = styled.div`
+  position: absolute;
+  transition: all 300ms ease-in-out;
+
+  &.enter-active {
+    top: 55px;
+  }
+
+  &.enter {
+    top: 40px;
+  }
+`;
+
+class Animation extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      transition: 'enter-active',
+    }
+  }
+
+  handleTransitionChange(currentState, cb) {
+    this.setState({
+      transition: currentState,
+    },cb)
+  }
+
+  startTransition() {
+    setTimeout(() => {
+      this.handleTransitionChange('enter');
+    });
+  }
+
+  componentDidMount() {
+    this.startTransition();
+  }
+
+  render() {
+    const { children } = this.props;
+    const { transition } = this.state;
+
+    return (
+      <StyledAnimation className={transition}>{children}</StyledAnimation>
+    )
+  }
+
+
+}
+
 const Layout = styled.div`
   flex: 1;
   display: flex;
@@ -21,8 +71,6 @@ const Toggler = styled.div`
 `;
 
 const DropDown = styled.div`
-  position: absolute;
-  top: 40px;
   border: 1px solid black;
   width: 150px;
   background-color: white;
@@ -34,7 +82,7 @@ class Navigation extends React.Component {
     super(props);
 
     this.state = {
-      isDropdownShown: false,
+      transition: false,
     };
 
   }
@@ -65,7 +113,11 @@ class Navigation extends React.Component {
         onMouseLeave={() => this.handleCloseDropdown()}
       >
         Categories
-        {isDropdownShown && <DropDown>this is a dropdown</DropDown>}
+        {isDropdownShown && (
+          <Animation>
+            <DropDown>this is a dropdown</DropDown>
+          </Animation>
+        )}
       </HeaderItem>
       <HeaderItem highlight as={Link} href="/tasks">
         Browse tasks
