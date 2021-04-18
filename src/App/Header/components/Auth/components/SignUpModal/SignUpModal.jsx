@@ -14,40 +14,82 @@ const Footer = styled.div`
   justify-content: space-between;
 `;
 
-const SignUpModal = ({
-  onClose,
-  onLogin,
-}) => (
-    <Modal
-      onClose={onClose}
-      header="Sign Up"
-      footer={(
-        <Footer>
-          <div>
-            Already have an account?
-          </div>
-          <Button
-            variant="link"
-            onClick={onLogin}
-          >
-            Login
-          </Button>
-        </Footer>
-      )}
-      >
-      <FormItem label="Email">
-        <Input type="text" />
-      </FormItem>
-      <FormItem label="Password">
-        <Input type="password" />
-      </FormItem>
-      <FormItem label="Confirm Password">
-        <Input type="password"  />
-      </FormItem>
-      <FormItem>
-        <FullWidthButton variant="success">Sign Up</FullWidthButton>
-      </FormItem>
-  </Modal>
-);
+class SignUpModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: {
+        email: '',
+        password: '',
+        confirmPassword: '',
+      },
+    };
+  }
+
+  handleDataChange(key) {
+    return ( event ) => {
+      const dataToChange = {
+        [key]: event.target.value,
+      };
+
+      this.setState((prevState) => ({
+        data: {
+          ...prevState.data,
+          ...dataToChange,
+        },
+      }));
+    };
+  }
+
+  render() {
+    const { onClose, onLogin } = this.props;
+    const { data } = this.state;
+  
+   return (
+     <>
+      <Modal
+        onClose={onClose}
+        header="Sign Up"
+        footer={(
+          <Footer>
+            <div>
+              Already have an account?
+            </div>
+            <Button
+              variant="link"
+              onClick={onLogin}
+            >
+              Login
+            </Button>
+          </Footer>
+        )}
+        >
+          <form 
+            onSubmit={(event) => {
+              event.preventDefault();
+
+              console.log(data);
+            }}
+            >
+              <FormItem label="Email">
+                <Input type="text" onChange={this.handleDataChange('email')} />
+              </FormItem>
+              <FormItem label="Password">
+                <Input type="password" onChange={this.handleDataChange('password')}/>
+              </FormItem>
+              <FormItem label="Confirm Password">
+                <Input type="password"  onChange={this.handleDataChange('confirmPassword')}/>
+              </FormItem>
+              <FormItem>
+                <FullWidthButton variant="success" type="submit">Sign Up</FullWidthButton>
+              </FormItem>
+          </form>
+      </Modal>
+    </>
+  );
+}}
+
+
 
 export default SignUpModal;
