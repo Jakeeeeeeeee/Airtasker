@@ -12,6 +12,7 @@ const Layout = styled.div`
 `;
 
 const MODAL = {
+  EMPTY: "EMPTY",
   SIGNUP : "SIGNUP",
   LOGIN : "LOGIN",
   FORGETPASSWORD : "FORGETPASSWORD",
@@ -22,60 +23,66 @@ class Auth extends React.Component {
     super(props);
 
     this.state = {
-      currentModal: false,
+      currentModal: MODAL.EMPTY,
     };
 
-    this.handleSignUpClick = this.handleSignUpClick.bind(this);
-    this.handleLoginClick = this.handleLoginClick.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.handleLoginClickFromSignUp = this.handleLoginClickFromSignUp.bind(this);
-    this.handleSignUpClickFromLogin = this.handleSignUpClickFromLogin.bind(this);
-    this.handleForgetPassword = this.handleForgetPassword.bind(this);
+    // this.handleSignUpClick = this.handleSignUpClick.bind(this);
+    // this.handleLoginClick = this.handleLoginClick.bind(this);
+    // this.handleCloseModal = this.handleCloseModal.bind(this);
+    // this.handleLoginClickFromSignUp = this.handleLoginClickFromSignUp.bind(this);
+    // this.handleSignUpClickFromLogin = this.handleSignUpClickFromLogin.bind(this);
+    // this.handleForgetPassword = this.handleForgetPassword.bind(this);
   }
 
-  handleSignUpClick(event) {
-    event.preventDefault();
-
+  handleCurrentModal(currentModal) {
     this.setState({
-      currentModal: MODAL.SIGNUP,
-    });
+      currentModal: currentModal,
+    })
   }
 
-  handleLoginClick(event) {
-    event.preventDefault();
+  // handleSignUpClick(event) {
+  //   event.preventDefault();
 
+  //   this.setState({
+  //     currentModal: MODAL.SIGNUP,
+  //   });
+  // }
+
+  // handleLoginClick(event) {
+  //   event.preventDefault();
+
+  //   this.setState({
+  //     currentModal: MODAL.LOGIN,
+  //   });
+  // }
+
+  // handleForgetPassword(event) {
+  //   event.preventDefault();
+
+  //   this.setState({
+  //     currentModal: MODAL.FORGETPASSWORD,
+  //   });
+  // }
+
+  // handleLoginClickFromSignUp(event) {
+  //   event.preventDefault();
+
+  //   this.setState({
+  //     currentModal: MODAL.LOGIN,
+  //   });
+  // }
+
+  // handleSignUpClickFromLogin(event) {
+  //   event.preventDefault();
+
+  //   this.setState({
+  //     currentModal: MODAL.SIGNUP,
+  //   });
+  // }
+
+  handleCloseModal(currentModal) {
     this.setState({
-      currentModal: MODAL.LOGIN,
-    });
-  }
-
-  handleForgetPassword(event) {
-    event.preventDefault();
-
-    this.setState({
-      currentModal: MODAL.FORGETPASSWORD,
-    });
-  }
-
-  handleLoginClickFromSignUp(event) {
-    event.preventDefault();
-
-    this.setState({
-      currentModal: MODAL.LOGIN,
-    });
-  }
-
-  handleSignUpClickFromLogin(event) {
-    event.preventDefault();
-
-    this.setState({
-      currentModal: MODAL.SIGNUP,
-    });
-  }
-
-  handleCloseModal() {
-    this.setState({
-      currentModal: false,
+      currentModal: currentModal,
     });
   }
 
@@ -86,12 +93,12 @@ class Auth extends React.Component {
       <>
         <Layout>
           <HeaderItem>
-            <Button size="sm" variant='nacked' onClick={this.handleSignUpClick}>
+            <Button size="sm" variant='nacked' onClick={() => this.handleCurrentModal(MODAL.SIGNUP)}>
               Sign Up
             </Button>
           </HeaderItem>
           <HeaderItem>
-            <Button size="sm" variant='nacked' onClick={this.handleLoginClick}>Login in</Button>
+            <Button size="sm" variant='nacked' onClick={() => this.handleCurrentModal(MODAL.LOGIN)}>Login in</Button>
           </HeaderItem>
           <HeaderItem>
             <Button size="sm" variant='secondary'>Become a Tasker</Button>
@@ -99,20 +106,20 @@ class Auth extends React.Component {
         </Layout>
         {currentModal === MODAL.SIGNUP && (
           <SignUpModal 
-            onClose={this.handleCloseModal}  
-            onLogin={this.handleLoginClickFromSignUp} 
+            onClose={() => this.handleCurrentModal(MODAL.EMPTY)}
+            onLogin={() => this.handleCurrentModal(MODAL.LOGIN)}
           />
         )}
         {currentModal === MODAL.LOGIN && (
           <LoginModal 
-            onClose={this.handleCloseModal}
-            onSignUp={this.handleSignUpClickFromLogin}
-            onForgetPassword={this.handleForgetPassword} 
+            onClose={() => this.handleCurrentModal(MODAL.EMPTY)}
+            onSignUp={() => this.handleCurrentModal(MODAL.SIGNUP)}
+            onForgetPassword={() => this.handleCurrentModal(MODAL.FORGETPASSWORD)}
           />
         )}
         {currentModal === MODAL.FORGETPASSWORD && (
           <ForgetPasswordModal 
-            onClose={this.handleCloseModal}
+            onClose={() => this.handleCurrentModal(MODAL.EMPTY)}
           />
         )}
       </>
