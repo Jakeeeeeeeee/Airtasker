@@ -22,11 +22,44 @@ const ErrorMessage = styled.div`
   font-weight: bold;
 `;
 
-const FORM = [
-  { key: 'email', label: 'Email', type: 'text'},
-  { key: 'password', label: 'Password', type: 'password'},
-  { key: 'confirmPassword', label: 'ConfirmPassword', type: 'password'},
-]
+// const FORM = [
+//   { key: 'email', label: 'Email', type: 'text'},
+//   { key: 'password', label: 'Password', type: 'password'},
+//   { key: 'confirmPassword', label: 'ConfirmPassword', type: 'password'},
+// ]
+
+const FORM = {
+  email: {
+    label: 'Email',
+    type: 'text',
+    validations: [{
+      valid: (data) => validator.isEmail(data.email),
+      errorMessage: 'Please input a valid Email !',
+    }, {
+      valid: (data) => !!data.email,
+      errorMessage: 'Please input your email !',
+    }]
+  },
+  password: {
+    label: 'Password', 
+    type: 'password',
+    validations: [{
+      valid: (data) => !!data.password,
+      errorMessage: 'Please input your password !',
+    }]
+  },
+  confirmPassword: {
+    label: 'ConfirmPassword', 
+    type: 'password',
+    validations: [{
+      valid: (data) => data.password === data.confirmPassword,
+      errorMessage: 'Please confirm your password !',
+    }, {
+      valid: (data) => !!data.confirmPassword,
+      errorMessage: 'Please input your Password !',
+    }],
+  },
+}
 
 class SignUpModal extends React.Component {
   constructor(props) {
@@ -34,11 +67,11 @@ class SignUpModal extends React.Component {
 
     this.state = {
       formDirty: false,
-      error: {
-        email: "",
-        password: "",
-        confirmPassword: "",
-      },
+      // error: {
+      //   email: "",
+      //   password: "",
+      //   confirmPassword: "",
+      // },
       data: {
         email: '',
         password: '',
@@ -58,67 +91,109 @@ class SignUpModal extends React.Component {
           ...prevState.data,
           ...dataToChange,
         },
-      }), () => {
-        this.valid();
-      });
+      }));
     };
   }
 
-  valid() {
+  getError() {
     const { data } = this.state;
 
-    FORM.forEach(({ key }) => this.hideErrorMessage(key, ""));
+    // FORM.forEach(({ key }) => this.hideErrorMessage(key, ""));
 
+    // const config = [{
+    //   validation: validator.isEmail(data.email),
+    //   key: 'email',
+    //   errorMessage: 'Please input a valid Email !',
+    // }, {
+    //   validation: !!data.email,
+    //   key: 'email',
+    //   errorMessage: 'Please input your email !',
+    // }, {
+    //   validation: !!data.password,
+    //   key: 'password',
+    //   errorMessage: 'Please input your password !',
+    // }, {
+    //   validation: data.password === data.confirmPassword,
+    //   key: 'confirmPassword',
+    //   errorMessage: 'Please confirm your password !',
+    // }, {
+    //   validation: !!data.confirmPassword,
+    //   key: 'confirmPassword',
+    //   errorMessage: 'Please input your Password !',
+    // }];
 
-    if(!validator.isEmail(data.email)) {
-      this.showErrorMessage('email', "Please input a valid Email !")
-    }
-    if(!data.email) {
-      this.showErrorMessage('email', "Please input your email !");
-    }
+    // const config = {
+    //   email: [{
+    //     validation: validator.isEmail(data.email),
+    //     errorMessage: 'Please input a valid Email !',
+    //   }, {
+    //     validation: !!data.email,
+    //     errorMessage: 'Please input your email !',
+    //   }], 
+    //   password: [{
+    //     validation: !!data.password,
+    //     errorMessage: 'Please input your password !',
+    //   }],
+    //   confirmPassword: [{
+    //     validation: data.password === data.confirmPassword,
+    //     errorMessage: 'Please confirm your password !',
+    //   }, {
+    //     validation: !!data.confirmPassword,
+    //     errorMessage: 'Please input your Password !',
+    //   }],
+    // };
 
-    
-    if(!data.password) {
-      this.showErrorMessage('password', "Please input your password !");
-    }
+    const error = {};
 
-    
-    if(data.password !== data.confirmPassword) {
-      this.showErrorMessage('confirmPassword', "Please confirm your password !")
-    }
-    if(!data.confirmPassword) {
-      this.showErrorMessage('confirmPassword', "Please input your Password !");
-    }
+    Object.keys(FORM).forEach((key) => {
+      const { validations } = FORM[key];
+      validations.forEach(({ valid, errorMessage }) => {
+        const validation = valid(data);
+        
+        if (validation) {
+          return;
+        }
+  
+        error[key] = errorMessage;
+      })
+      // this.showErrorMessage(key, errorMessage);
+    });
+
+    return error;
   }
 
-  showErrorMessage = (key, errorMessage) => {
-    this.setState((prevState) => ({
-      error: {
-        ...prevState.error,
-        [key]: errorMessage,
-      },
-    }));
-  }
+  // showErrorMessage = (key, errorMessage) => {
+  //   this.setState((prevState) => ({
+  //     error: {
+  //       ...prevState.error,
+  //       [key]: errorMessage,
+  //     },
+  //   }));
+  // }
 
-  hideErrorMessage = (key) => {
-    this.setState((prevState) => ({
-      error: {
-        ...prevState.error,
-        [key]: false,
-      },
-    }));
-  }
+  // hideErrorMessage = (key) => {
+  //   this.setState((prevState) => ({
+  //     error: {
+  //       ...prevState.error,
+  //       [key]: false,
+  //     },
+  //   }));
+  // }
 
   handleFormTouched() {
     this.setState({
       formDirty: true,
-    })
+    });
   }
 
   render() {
     const { onClose, onLogin } = this.props;
-    const { data, error, formDirty } = this.state;
+    const { data, formDirty } = this.state;
   
+    const error = this.getError();
+    console.log(error);
+    console.log(error['email']);
+
    return (
      <>
       <Modal
@@ -143,24 +218,25 @@ class SignUpModal extends React.Component {
               event.preventDefault();
               
               this.handleFormTouched();
-              this.valid();
+              this.getError();
 
               console.log(data);
             }}
             >
-              {FORM.map((form) => {
-                const isError = error[form.key] && formDirty;
+              {Object.keys(FORM).map((key) => {
+                const isError = error[key] && formDirty;
+                const { label, type } = FORM[key];
 
                 return (
-                  <FormItem key={form.key} label={form.label}>
+                  <FormItem key={key} label={label}>
                   <Input
-                    type={form.type}
-                    onChange={this.handleDataChange(form.key)}
+                    type={type}
+                    onChange={this.handleDataChange(key)}
                     error={isError} 
                   />
                   {isError && (
                     <ErrorMessage>
-                      {error[form.key]}
+                      {error[key]}
                     </ErrorMessage>
                   )}
                 </FormItem>
